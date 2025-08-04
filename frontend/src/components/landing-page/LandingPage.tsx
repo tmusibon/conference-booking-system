@@ -40,13 +40,11 @@ const LandingPage: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch rooms
     axios
       .get<Room[]>("http://localhost:8000/rooms")
       .then((response) => setRooms(response.data))
       .catch((error) => console.error("Error fetching rooms:", error));
 
-    // Fetch bookings for today
     const today = new Date().toISOString().split("T")[0];
     axios
       .get<Booking[]>("http://localhost:8000/bookings")
@@ -58,7 +56,7 @@ const LandingPage: React.FC = () => {
       })
       .catch((error) => console.error("Error fetching bookings:", error));
 
-    // Subscribe to SSE
+    // This subscride to SSE
     const eventSource = new EventSource(
       "http://localhost:8000/room-availability"
     );
