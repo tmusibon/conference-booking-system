@@ -1,0 +1,35 @@
+-- Insert users from users.csv
+INSERT INTO users (email, name) VALUES
+('john.doe@email.com', 'John Doe'),
+('jane.smith@email.com', 'Jane Smith'),
+('alice.jones@email.com', 'Alice Jones'),
+('bob.brown@email.com', 'Bob Brown'),
+('charlie.johnson@email.com', 'Charlie Johnson'),
+('diana.wilson@email.com', 'Diana Wilson'),
+('eric.miller@email.com', 'Eric Miller'),
+('fiona.davis@email.com', 'Fiona Davis'),
+('george.rodriguez@email.com', 'George Rodriguez'),
+('hannah.garcia@email.com', 'Hannah Garcia'),
+('ian.martinez@email.com', 'Ian Martinez'),
+('julia.robinson@email.com', 'Julia Robinson'),
+('kevin.clark@email.com', 'Kevin Clark'),
+('linda.lewis@email.com', 'Linda Lewis'),
+('michael.lee@email.com', 'Michael Lee'),
+('natalie.walker@email.com', 'Natalie Walker'),
+('oscar.hall@email.com', 'Oscar Hall'),
+('paula.young@email.com', 'Paula Young'),
+('quentin.allen@email.com', 'Quentin Allen'),
+('rachel.hernandez@email.com', 'Rachel Hernandez');
+
+-- Insert rooms from rooms.csv
+INSERT INTO rooms (id, name, location, equipment, capacity) VALUES
+(1, 'Alpha Room', 'Floor 1', 'Projector', 2),
+(2, 'Beta Room', 'Floor 1', 'Whiteboard', 3),
+(3, 'Gamma Room', 'Floor 2', 'TV Screen', 2),
+(4, 'Delta Room', 'Floor 2', 'Projector', 2),
+(5, 'Epsilon Room', 'Floor 3', 'Phone', 4),
+(6, 'Zeta Room', 'Floor 3', 'Whiteboard, Projector', 5),
+(7, 'Eta Room', 'Floor 4', 'TV Screen', 3),
+(8, 'Theta Room', 'Floor 4', 'Projector', 4),
+(9, 'Iota Room', 'Floor 5', 'Whiteboard', 2),
+(10, 'Kappa Room', 'Floor 5', 'Whiteboard, TV Screen', 6);
