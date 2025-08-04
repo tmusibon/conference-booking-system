@@ -46,12 +46,22 @@ const LandingPage: React.FC = () => {
       .catch((error) => console.error("Error fetching rooms:", error));
 
     const today = new Date().toISOString().split("T")[0];
+    console.log("Today:", today);
     axios
       .get<Booking[]>("http://localhost:8000/bookings")
       .then((response) => {
-        const todayBookings = response.data.filter((booking) =>
-          booking.start_time.startsWith(today)
-        );
+        console.log("All bookings:", response.data);
+        const todayBookings = response.data.filter((booking) => {
+          const bookingDate = booking.start_time.split("T")[0];
+          console.log(
+            "Booking date:",
+            bookingDate,
+            "Matches today:",
+            bookingDate === today
+          );
+          return bookingDate === today;
+        });
+        console.log("Today’s bookings:", todayBookings);
         setBookings(todayBookings);
       })
       .catch((error) => console.error("Error fetching bookings:", error));
@@ -97,14 +107,20 @@ const LandingPage: React.FC = () => {
         Today’s Bookings
       </Typography>
       <List>
-        {bookings.map((booking) => (
-          <ListItem key={booking.id}>
-            <ListItemText
-              primary={booking.title}
-              secondary={`Room ${booking.room_id}, ${booking.start_time} - ${booking.end_time}`}
-            />
+        {bookings.length === 0 ? (
+          <ListItem>
+            <ListItemText primary="No bookings for today" />
           </ListItem>
-        ))}
+        ) : (
+          bookings.map((booking) => (
+            <ListItem key={booking.id}>
+              <ListItemText
+                primary={booking.title}
+                secondary={`Room ${booking.room_id}, ${booking.start_time} - ${booking.end_time}`}
+              />
+            </ListItem>
+          ))
+        )}
       </List>
       <Typography variant="h6" sx={{ mt: 2 }}>
         Recent Availability Updates

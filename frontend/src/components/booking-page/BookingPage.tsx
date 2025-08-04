@@ -8,6 +8,7 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  TextFieldProps,
 } from "@mui/material";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
@@ -95,28 +96,24 @@ const BookingPage: React.FC = () => {
         <DateTimePicker
           label="Start Time"
           value={formData.start_time}
-          onChange={(value) =>
+          onChange={(value: Date | null) =>
             value && setFormData({ ...formData, start_time: value })
           }
-          slotProps={{
-            textField: {
-              fullWidth: true,
-              margin: "normal",
-            },
-          }}
+          inputFormat="MM/dd/yyyy HH:mm"
+          renderInput={(params: TextFieldProps) => (
+            <TextField {...params} fullWidth margin="normal" />
+          )}
         />
         <DateTimePicker
           label="End Time"
           value={formData.end_time}
-          onChange={(value) =>
+          onChange={(value: Date | null) =>
             value && setFormData({ ...formData, end_time: value })
           }
-          slotProps={{
-            textField: {
-              fullWidth: true,
-              margin: "normal",
-            },
-          }}
+          inputFormat="MM/dd/yyyy HH:mm"
+          renderInput={(params: TextFieldProps) => (
+            <TextField {...params} fullWidth margin="normal" />
+          )}
         />
         <TextField
           label="Title"

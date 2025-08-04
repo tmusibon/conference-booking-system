@@ -1,5 +1,5 @@
-import React from "react";
-import { render, screen } from "@testing-library/react";
+import React, { act } from "react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import LandingPage from "../landing-page/LandingPage";
 import axios from "axios";
@@ -13,7 +13,7 @@ global.EventSource = jest.fn(() => ({
   close: jest.fn(),
 })) as any;
 
-test("renders landing page with title", () => {
+test("renders landing page with title", async () => {
   mockedAxios.get.mockResolvedValueOnce({
     data: [
       {
@@ -27,12 +27,17 @@ test("renders landing page with title", () => {
   });
   mockedAxios.get.mockResolvedValueOnce({ data: [] });
 
-  render(
-    <MemoryRouter>
-      <LandingPage />
-    </MemoryRouter>
-  );
-  expect(
-    screen.getByText(/Welcome to Conference Room Booking/i)
-  ).toBeInTheDocument();
+  await act(async () => {
+    render(
+      <MemoryRouter>
+        <LandingPage />
+      </MemoryRouter>
+    );
+  });
+
+  await waitFor(() => {
+    expect(
+      screen.getByText(/Welcome to Conference Room Booking/i)
+    ).toBeInTheDocument();
+  });
 });
