@@ -41,12 +41,8 @@ const BookingPage: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get<Room[]>("http://localhost:8000/rooms")
-      .then((response) => setRooms(response.data));
-    axios
-      .get<User[]>("http://localhost:8000/users")
-      .then((response) => setUsers(response.data));
+    axios.get<Room[]>("/rooms").then((response) => setRooms(response.data));
+    axios.get<User[]>("/users").then((response) => setUsers(response.data));
   }, []);
 
   const handleSubmit = () => {
@@ -58,7 +54,7 @@ const BookingPage: React.FC = () => {
       invitees: formData.invitees,
     };
     axios
-      .post("http://localhost:8000/bookings", bookingData)
+      .post("/bookings", bookingData)
       .then((response) => navigate(`/confirmation/${response.data.id}`))
       .catch((error) =>
         alert(

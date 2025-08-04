@@ -26,14 +26,14 @@ const ConfirmationPage: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get<Booking>(`http://localhost:8000/bookings/${id}`)
+      .get<Booking>(`/bookings/${id}`)
       .then((response) => setBooking(response.data))
       .catch((error) => console.error("Error fetching booking:", error));
   }, [id]);
 
   const handleCancel = () => {
     axios
-      .delete(`http://localhost:8000/bookings/${id}`)
+      .delete(`/bookings/${id}`)
       .then(() => navigate("/"))
       .catch((error) =>
         alert(
