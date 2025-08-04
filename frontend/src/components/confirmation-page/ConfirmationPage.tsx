@@ -26,7 +26,7 @@ const ConfirmationPage: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/bookings/${id}`)
+      .get<Booking>(`http://localhost:8000/bookings/${id}`)
       .then((response) => setBooking(response.data))
       .catch((error) => console.error("Error fetching booking:", error));
   }, [id]);
@@ -43,6 +43,10 @@ const ConfirmationPage: React.FC = () => {
       );
   };
 
+  const handleBackHome = () => {
+    navigate("/");
+  };
+
   if (!booking) return <Typography>Loading...</Typography>;
 
   return (
@@ -55,7 +59,7 @@ const ConfirmationPage: React.FC = () => {
       <Typography>Start Time: {booking.start_time}</Typography>
       <Typography>End Time: {booking.end_time}</Typography>
       <Typography>Title: {booking.title}</Typography>
-      <Typography variant="h6" style={{ marginTop: "10px" }}>
+      <Typography variant="h6" sx={{ mt: 2 }}>
         Invitees
       </Typography>
       <List>
@@ -69,9 +73,12 @@ const ConfirmationPage: React.FC = () => {
         variant="contained"
         color="error"
         onClick={handleCancel}
-        style={{ marginTop: "20px" }}
+        sx={{ mt: 2, mr: 2 }}
       >
         Cancel Booking
+      </Button>
+      <Button variant="contained" onClick={handleBackHome} sx={{ mt: 2 }}>
+        Back Home
       </Button>
     </Container>
   );
