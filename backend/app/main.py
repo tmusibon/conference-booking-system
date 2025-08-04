@@ -31,6 +31,21 @@ def get_rooms(db: Session = Depends(get_db)):
 def get_users(db: Session = Depends(get_db)):
     return db.query(User).all()
 
+@app.get("/bookings", response_model=List[BookingSchema])
+def get_bookings(db: Session = Depends(get_db)):
+    bookings = db.query(Booking).all()
+    return [
+        BookingSchema(
+            id=booking.id,
+            room_id=booking.room_id,
+            start_time=booking.start_time,
+            end_time=booking.end_time,
+            title=booking.title,
+            invitees=[invitee.user_email for invitee in booking.invitees]
+        )
+        for booking in bookings
+    ]
+
 @app.post("/bookings", response_model=BookingSchema)
 def create_booking(booking: BookingCreate, db: Session = Depends(get_db)):
     room = db.query(Room).filter(Room.id == booking.room_id).first()

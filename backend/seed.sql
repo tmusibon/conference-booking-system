@@ -1,4 +1,3 @@
--- Insert users from users.csv
 INSERT INTO users (email, name) VALUES
 ('john.doe@email.com', 'John Doe'),
 ('jane.smith@email.com', 'Jane Smith'),
@@ -21,7 +20,6 @@ INSERT INTO users (email, name) VALUES
 ('quentin.allen@email.com', 'Quentin Allen'),
 ('rachel.hernandez@email.com', 'Rachel Hernandez');
 
--- Insert rooms from rooms.csv
 INSERT INTO rooms (id, name, location, equipment, capacity) VALUES
 (1, 'Alpha Room', 'Floor 1', 'Projector', 2),
 (2, 'Beta Room', 'Floor 1', 'Whiteboard', 3),
