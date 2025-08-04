@@ -32,6 +32,10 @@ A full-stack application for booking conference rooms with real-time availabilit
 
 ### Frontend Setup
 
+# The frontend is containerized and runs automatically with docker compose up.
+
+# To run manually:
+
 1.  Navigate to the frontend directory:
     cd frontend
 
@@ -40,6 +44,37 @@ A full-stack application for booking conference rooms with real-time availabilit
 
 3.  Start the frontend:
     npm start
+
+### API Endpoints
+
+- GET /rooms: List all rooms.
+
+Response: [{id: number, name: string, location: string, equipment: string, capacity: number}, ...]
+
+- GET /users: List all users.
+
+Response: [{email: string, name: string}, ...]
+
+- GET /bookings: List all bookings.
+
+Response: [{id: number, room_id: number, start_time: string, end_time: string, title: string, invitees: string[]}, ...]
+
+- POST /bookings: Create a booking.
+
+Request: {room_id: number, start_time: string, end_time: string, title: string, invitees: string[]}
+Response: {id: number, room_id: number, start_time: string, end_time: string, title: string, invitees: string[]}
+
+- GET /bookings/{id}: Get booking details.
+
+Response: {id: number, room_id: number, start_time: string, end_time: string, title: string, invitees: string[]}
+
+- DELETE /bookings/{id}: Cancel a booking.
+
+Response: {message: string}
+
+- GET /room-availability: Stream real-time availability updates (SSE).
+
+Response: data: {room_id: number, start_time: string, end_time: string, status: string}
 
 ### Component Diagram
 
@@ -52,3 +87,22 @@ A full-stack application for booking conference rooms with real-time availabilit
 | SQLAlchemy
 |
 [PostgreSQL Database]
+
+### Database Schema
+
+- Rooms: id (PK), name, location, equipment, capacity
+- Users: email (PK), name
+- Bookings: id (PK), room_id (FK), start_time, end_time, title
+- Invitees: booking_id (FK), user_email (FK)
+
+### Running Tests
+
+# Backend:
+
+cd backend
+pytest tests/test_bookings.py
+
+# Frontend:
+
+cd frontend
+npm test

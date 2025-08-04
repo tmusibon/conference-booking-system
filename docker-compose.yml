@@ -29,5 +29,16 @@ services:
     volumes:
       - ./backend/seed.sql:/app/seed.sql
       - ./backend/wait-for-it.sh:/app/wait-for-it.sh
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
 volumes:
   postgres_data:
