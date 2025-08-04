@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.responses import StreamingResponse
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from sqlalchemy import and_
 from .database import SessionLocal, get_db
@@ -10,6 +11,14 @@ import asyncio
 import json
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # In-memory event queue for SSE (simplified for demo)
 event_queue = []
@@ -24,18 +33,15 @@ def get_users(db: Session = Depends(get_db)):
 
 @app.post("/bookings", response_model=BookingSchema)
 def create_booking(booking: BookingCreate, db: Session = Depends(get_db)):
-    # Validate room exists
     room = db.query(Room).filter(Room.id == booking.room_id).first()
     if not room:
         raise HTTPException(status_code=404, detail="Room not found")
 
-    # Validate invitees exist
     for email in booking.invitees:
         user = db.query(User).filter(User.email == email).first()
         if not user:
             raise HTTPException(status_code=404, detail=f"User {email} not found")
 
-    # Check for double booking
     conflicting_booking = db.query(Booking).filter(
         Booking.room_id == booking.room_id,
         and_(
@@ -46,7 +52,6 @@ def create_booking(booking: BookingCreate, db: Session = Depends(get_db)):
     if conflicting_booking:
         raise HTTPException(status_code=400, detail="Room is already booked for this time slot")
 
-    # Create booking
     db_booking = Booking(
         room_id=booking.room_id,
         start_time=booking.start_time,
@@ -57,13 +62,11 @@ def create_booking(booking: BookingCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(db_booking)
 
-    # Add invitees
     for email in booking.invitees:
         db_invitee = Invitee(booking_id=db_booking.id, user_email=email)
         db.add(db_invitee)
     db.commit()
 
-    # Notify SSE clients of availability change
     event_queue.append({
         "room_id": db_booking.room_id,
         "start_time": db_booking.start_time.isoformat(),
@@ -71,7 +74,6 @@ def create_booking(booking: BookingCreate, db: Session = Depends(get_db)):
         "status": "booked"
     })
 
-    # Return booking with invitees
     invitees = [invitee.user_email for invitee in db_booking.invitees]
     return BookingSchema(
         id=db_booking.id,
